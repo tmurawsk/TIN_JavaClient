@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints percentHeight="6.0" vgrow="SOMETIMES" />
+    <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <GridPane GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="20.0" />
+          <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" percentWidth="85.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints percentHeight="100.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="File path:" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </Text>
+            <Text fill="#686464" strokeType="OUTSIDE" strokeWidth="0.0" text="*none*" GridPane.columnIndex="1" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+         </children>
+         <opaqueInsets>
+            <Insets left="5.0" right="5.0" />
+         </opaqueInsets>
+      </GridPane>
+      <GridPane GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="120.0" text="Load file" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="120.0" text="Send file" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="120.0" text="Disconnect" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+      <ImageView fitHeight="512.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin>
+      </ImageView>
+   </children>
+</GridPane>
