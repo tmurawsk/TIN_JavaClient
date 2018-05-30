@@ -35,7 +35,7 @@ public class MenuController {
 
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("../appWindow/appWindow.fxml"));
-        Scene scene = new Scene(root, 650, 530);
+        Scene scene = new Scene(root, 650, 630);
         stage.setTitle("Java Client");
         stage.setScene(scene);
         stage.setResizable(false);
