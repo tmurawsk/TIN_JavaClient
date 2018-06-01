@@ -30,11 +30,14 @@ public class MenuController {
 
     @FXML
     private void onConnectButtonClicked() throws Exception {
-        if(!validate(addressTextField.getText(), portTextField.getText()))
+        //TODO new ConnectionManager
+
+        if(!validateConnectionData(addressTextField.getText(), portTextField.getText()))
             return;
 
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("../appWindow/appWindow.fxml"));
+        //TODO give root ConnectionManager
         Scene scene = new Scene(root, 650, 630);
         stage.setTitle("Java Client");
         stage.setScene(scene);
@@ -42,7 +45,7 @@ public class MenuController {
         stage.show();
     }
 
-    private boolean validate(String address, String port){
+    private boolean validateConnectionData(String address, String port){
         return true; //TODO try to connect from Client
     }
 }

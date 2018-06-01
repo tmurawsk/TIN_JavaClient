@@ -1,5 +1,6 @@
 package TIN.appWindow;
 
+import TIN.ConnectionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -12,6 +13,8 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class AppController {
+    private ConnectionManager connectionManager;
+
     @FXML
     private Text filePathText;
 
@@ -20,14 +23,14 @@ public class AppController {
 
     @FXML
     private Button sendButton;
+
     @FXML
     private Button loadButton;
     @FXML
     private Button disconnectButton;
-
     private Image image;
-    private FileChooser fileChooser;
 
+    private FileChooser fileChooser;
     public AppController() {
         FileChooser.ExtensionFilter imageFilter
                 = new FileChooser.ExtensionFilter("Image Files", "*.bmp");
@@ -75,6 +78,11 @@ public class AppController {
         //TODO ask Client to send image
     }
 
+    @FXML
+    private void onImageViewClicked() {
+        imageView.setImage(null); //TODO change image
+    }
+
     private void showAlertDialog(String headerMsg, String contextMsg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -85,5 +93,9 @@ public class AppController {
 
     private boolean validateFilePathText(String filePath) {
         return !filePath.equals("*none*");
+    }
+
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
     }
 }
