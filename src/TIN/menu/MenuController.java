@@ -44,7 +44,7 @@ public class MenuController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../appWindow/appWindow.fxml"));
             Parent root = fxmlLoader.load();
 
-            AppController controller = fxmlLoader.<AppController>getController();
+            AppController controller = fxmlLoader.getController();
             controller.setConnectionManager(connectionManager);
 
             Scene scene = new Scene(root, 650, 630);
@@ -57,8 +57,7 @@ public class MenuController {
         } catch (NumberFormatException e) {
             showAlertDialog(
                     "Error port number format",
-                    e.getMessage()
-//                    "Port number is supposed to be integer. Please insert valid value"
+                    "Port number is supposed to be integer. Please insert valid value"
             );
         } catch (IOException e) {
             showAlertDialog(

@@ -1,6 +1,7 @@
 package TIN.appWindow;
 
 import TIN.ConnectionManager;
+import TIN.Converter;
 import TIN.menu.MenuController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +31,9 @@ public class AppController {
     @FXML
     private Button disconnectButton;
 
-    private Image image;
+    private Image currentImage;
+
+    private Image sendingImage;
 
     private FileChooser fileChooser;
 
@@ -73,7 +76,7 @@ public class AppController {
             }
 
             filePathText.setText(file.getPath());
-            image = new Image(file.toURI().toString());
+            sendingImage = new Image(file.toURI().toString());
         }
     }
 
@@ -82,18 +85,21 @@ public class AppController {
         String filePath = filePathText.getText();
 
         if (!validateFilePathText(filePath)) {
-            showAlertDialog("No file to send", "Please choose a file before sending!");
+            showAlertDialog(
+                    "No file to send",
+                    "Please choose a file before sending!"
+            );
             return;
         }
 
-        imageView.setImage(image);
-
-        //TODO ask Client to send image
+        imageView.setImage(sendingImage); //TODO remove
+        connectionManager.send(Converter.getImageFromBytes(sendingImage));
     }
 
     @FXML
     private void onImageViewClicked() {
-        imageView.setImage(null); //TODO change image
+        currentImage = Converter.getBytesFromImage(connectionManager.getNextImage()); //TODO change for Converter
+        imageView.setImage(currentImage);
     }
 
     private void showAlertDialog(String headerMsg, String contextMsg) {

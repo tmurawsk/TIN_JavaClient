@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class Connection {
+class Connection {
     private Socket socket;
     private String ipAddress;
     private int port;
@@ -25,15 +25,17 @@ public class Connection {
         out = new DataOutputStream(socket.getOutputStream());
     }
 
-    public void disconnect() throws Exception {
+    void disconnect() throws Exception {
         socket.close();
     }
 
-    public void send(byte[] message) throws Exception {
+    void send(byte[] message) throws Exception {
         out.write(message);
     }
 
-    public void read(byte[] message) throws Exception {
+    byte[] read(int size) throws Exception {
+        byte[] message = new byte[size];
         in.readFully(message);
+        return message;
     }
 }
