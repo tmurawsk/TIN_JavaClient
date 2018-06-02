@@ -2,10 +2,18 @@ package TIN;
 
 import TIN.menu.MenuController;
 
+import javax.crypto.NoSuchPaddingException;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 
 public class ConnectionManager {
     private Connection connection;
+    private Encryptor encryptor;
     private Thread receiveThread;
     private Thread sendThread;
     private LinkedList<byte[]> messageQueue;
@@ -19,14 +27,26 @@ public class ConnectionManager {
                 while (true) {
                     //TODO read header and then buffer
                     byte[] buffer = connection.read(Converter.maxImageSize);
-                    messageQueue.add(buffer);
+
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                    encryptor.decrypt(inputStream, outputStream);
+
+                    messageQueue.add(outputStream.toByteArray());
                 }
+            } catch (NoSuchAlgorithmException | NoSuchPaddingException
+                    | InvalidKeyException e) {
+                MenuController.showAlertDialog(
+                        "Error encrypting message",
+                        e.getMessage()
+                );
             } catch (Exception e) {
                 MenuController.showAlertDialog(
                         "Error reading from socket",
                         e.getMessage()
                 );
-
+            } finally {
                 try {
                     disconnect();
                 } catch (Exception ex) {
@@ -41,6 +61,7 @@ public class ConnectionManager {
 
     private class Sender implements Runnable {
         private byte[] buffer;
+        //TODO encrypt message
 
         Sender(byte[] buffer) {
             this.buffer = buffer;
@@ -60,6 +81,7 @@ public class ConnectionManager {
     }
 
     public ConnectionManager() {
+        encryptor = new Encryptor();
         messageQueue = new LinkedList<>();
     }
 

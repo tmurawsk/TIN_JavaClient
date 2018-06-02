@@ -17,7 +17,7 @@ public class Converter {
         return new byte[size];
     }
 
-    public static byte[] getImageFromBytes(Image image) {
+    public static byte[] getBytesFromImage(Image image) {
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buffer;
@@ -36,7 +36,7 @@ public class Converter {
         return buffer;
     }
 
-    public static Image getBytesFromImage(byte[] buffer) {
+    public static Image getImageFromBytes(byte[] buffer) {
         return new Image(new ByteArrayInputStream(buffer));
     }
 }

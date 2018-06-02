@@ -2,6 +2,7 @@ package TIN.appWindow;
 
 import TIN.ConnectionManager;
 import TIN.Converter;
+import TIN.Encryptor;
 import TIN.menu.MenuController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,6 +12,8 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class AppController {
@@ -92,13 +95,35 @@ public class AppController {
             return;
         }
 
-        imageView.setImage(sendingImage); //TODO remove
-        connectionManager.send(Converter.getImageFromBytes(sendingImage));
+        ///--------------------------
+        byte[] before = Converter.getBytesFromImage(sendingImage);
+        ByteArrayInputStream in = new ByteArrayInputStream(before);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Encryptor encryptor = new Encryptor();
+        try {
+            encryptor.encrypt(in, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        byte[] after = out.toByteArray();
+
+        ByteArrayInputStream in2 = new ByteArrayInputStream(after);
+        ByteArrayOutputStream out2 = new ByteArrayOutputStream();
+        try {
+            encryptor.decrypt(in2, out2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        imageView.setImage(Converter.getImageFromBytes(out2.toByteArray()));
+
+        ///--------------------------
+//        imageView.setImage(sendingImage); //TODO remove
+//        connectionManager.send(Converter.getImageFromBytes(sendingImage));
     }
 
     @FXML
     private void onImageViewClicked() {
-        currentImage = Converter.getBytesFromImage(connectionManager.getNextImage()); //TODO change for Converter
+        currentImage = Converter.getImageFromBytes(connectionManager.getNextImage()); //TODO change for Converter
         imageView.setImage(currentImage);
     }
 
