@@ -1,8 +1,8 @@
 package TIN.appWindow;
 
 import TIN.ConnectionManager;
+import TIN.menu.MenuController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,11 +26,15 @@ public class AppController {
 
     @FXML
     private Button loadButton;
+
     @FXML
     private Button disconnectButton;
+
     private Image image;
 
     private FileChooser fileChooser;
+
+
     public AppController() {
         FileChooser.ExtensionFilter imageFilter
                 = new FileChooser.ExtensionFilter("Image Files", "*.bmp");
@@ -41,6 +45,15 @@ public class AppController {
 
     @FXML
     private void onDisconnectButtonClicked() {
+        try {
+            connectionManager.disconnect();
+        } catch (Exception e) {
+            showAlertDialog(
+                    "Error disconnecting",
+                    e.getMessage()
+            );
+        }
+
         Stage stage = (Stage) disconnectButton.getScene().getWindow();
         stage.close();
     }
@@ -84,11 +97,7 @@ public class AppController {
     }
 
     private void showAlertDialog(String headerMsg, String contextMsg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(headerMsg);
-        alert.setContentText(contextMsg);
-        alert.showAndWait();
+        MenuController.showAlertDialog(headerMsg, contextMsg);
     }
 
     private boolean validateFilePathText(String filePath) {
