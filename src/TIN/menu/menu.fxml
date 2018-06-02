@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -46,7 +45,7 @@
             <Insets right="10.0" />
          </GridPane.margin>
       </TextField>
-      <Button fx:id="connectButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onConnectButtonClicked" prefWidth="100.0" text="Connect" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <Button fx:id="connectButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" onMouseClicked="#onConnectButtonClicked" prefWidth="100.0" text="Connect" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <font>
             <Font size="16.0" />
          </font>

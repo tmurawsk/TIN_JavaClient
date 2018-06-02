@@ -10,8 +10,6 @@ import java.io.*;
 
 public class Encryptor {
     private String key;
-    private static int keyLength = 16;
-    private static int initVectorLength = 16;
 
     public Encryptor() {
         try {
@@ -42,7 +40,7 @@ public class Encryptor {
         byte[] buffer = new byte[128];
         int numBytes;
 
-        while((numBytes = cis.read(buffer)) != -1) {
+        while ((numBytes = cis.read(buffer)) != -1) {
             outputStream.write(buffer, 0, numBytes);
         }
 
@@ -62,7 +60,7 @@ public class Encryptor {
         byte[] buffer = new byte[128];
         int numBytes;
 
-        while((numBytes = inputStream.read(buffer)) != -1) {
+        while ((numBytes = inputStream.read(buffer)) != -1) {
             cos.write(buffer, 0, numBytes);
         }
 

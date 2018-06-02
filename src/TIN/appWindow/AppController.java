@@ -34,8 +34,6 @@ public class AppController {
     @FXML
     private Button disconnectButton;
 
-    private Image currentImage;
-
     private Image sendingImage;
 
     private FileChooser fileChooser;
@@ -53,6 +51,11 @@ public class AppController {
     private void onDisconnectButtonClicked() {
         try {
             connectionManager.disconnect();
+        } catch (SecurityException e) {
+            showAlertDialog(
+                    "Error interrupting thread",
+                    e.getMessage()
+            );
         } catch (Exception e) {
             showAlertDialog(
                     "Error disconnecting",
@@ -95,7 +98,7 @@ public class AppController {
             return;
         }
 
-        ///--------------------------
+        ///------------TEST--------------//TODO remove this block
         byte[] before = Converter.getBytesFromImage(sendingImage);
         ByteArrayInputStream in = new ByteArrayInputStream(before);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -118,13 +121,14 @@ public class AppController {
 
         ///--------------------------
 //        imageView.setImage(sendingImage); //TODO remove
-//        connectionManager.send(Converter.getImageFromBytes(sendingImage));
+//        connectionManager.send(Converter.getImageFromBytes(sendingImage)); //TODO uncomment
     }
 
     @FXML
     private void onImageViewClicked() {
-        currentImage = Converter.getImageFromBytes(connectionManager.getNextImage()); //TODO change for Converter
-        imageView.setImage(currentImage);
+        imageView.setImage(
+                Converter.getImageFromBytes(
+                        connectionManager.getNextImage()));
     }
 
     private void showAlertDialog(String headerMsg, String contextMsg) {

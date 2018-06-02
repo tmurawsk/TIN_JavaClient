@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class Converter {
-    public static int maxImageSize = 786486;
+    static int maxImageSize = 786486;
 
     public static byte[] generateEmptyByteBuffer(int size) {
         return new byte[size];
@@ -37,6 +37,6 @@ public class Converter {
     }
 
     public static Image getImageFromBytes(byte[] buffer) {
-        return new Image(new ByteArrayInputStream(buffer));
+        return buffer == null ? null : new Image(new ByteArrayInputStream(buffer));
     }
 }

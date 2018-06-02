@@ -3,10 +3,9 @@ package TIN;
 import TIN.menu.MenuController;
 
 import javax.crypto.NoSuchPaddingException;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.net.SocketException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
@@ -25,7 +24,7 @@ public class ConnectionManager {
 
             try {
                 while (true) {
-                    //TODO read header and then buffer
+                    //TODO read header and then buffer?
                     byte[] buffer = connection.read(Converter.maxImageSize);
 
                     ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
@@ -41,27 +40,19 @@ public class ConnectionManager {
                         "Error encrypting message",
                         e.getMessage()
                 );
+            } catch (SocketException e) {
+                System.out.println("Disconnecting...");
             } catch (Exception e) {
                 MenuController.showAlertDialog(
                         "Error reading from socket",
                         e.getMessage()
                 );
-            } finally {
-                try {
-                    disconnect();
-                } catch (Exception ex) {
-                    MenuController.showAlertDialog(
-                            "Error closing socket",
-                            ex.getMessage()
-                    );
-                }
             }
         }
     }
 
     private class Sender implements Runnable {
         private byte[] buffer;
-        //TODO encrypt message
 
         Sender(byte[] buffer) {
             this.buffer = buffer;
@@ -70,7 +61,20 @@ public class ConnectionManager {
         @Override
         public void run() {
             try {
-                connection.send(buffer);
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                encryptor.encrypt(inputStream, outputStream);
+                connection.send(outputStream.toByteArray());
+
+            } catch (NoSuchAlgorithmException | NoSuchPaddingException
+                    | InvalidKeyException e) {
+                MenuController.showAlertDialog(
+                        "Error encrypting message",
+                        e.getMessage()
+                );
+            } catch (SocketException e) {
+                System.out.println("Disconnecting...");
             } catch (Exception e) {
                 MenuController.showAlertDialog(
                         "Error sending to socket",
@@ -94,9 +98,6 @@ public class ConnectionManager {
     }
 
     public void disconnect() throws Exception {
-        sendThread.interrupt();
-        receiveThread.interrupt();
-
         connection.disconnect();
         messageQueue.clear();
     }

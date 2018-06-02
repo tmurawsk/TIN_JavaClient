@@ -10,8 +10,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.awt.event.ActionEvent;
+import java.beans.EventHandler;
 import java.io.IOException;
 
 public class MenuController {
@@ -53,6 +57,11 @@ public class MenuController {
             stage.setTitle("Java Client");
             stage.setScene(scene);
             stage.setResizable(false);
+
+            System.out.println("Connected to server:\n\t"
+                    + addressTextField.getText()+ " : "
+                    + portTextField.getText());
+
             stage.show();
         } catch (NumberFormatException e) {
             showAlertDialog(
@@ -68,7 +77,6 @@ public class MenuController {
             showAlertDialog(
                     "Error connecting to server",
                     e.getMessage()
-//                    "Connection data invalid or server unreachable"
             );
         }
     }

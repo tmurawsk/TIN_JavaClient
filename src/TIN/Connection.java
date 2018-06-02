@@ -26,6 +26,8 @@ class Connection {
     }
 
     void disconnect() throws Exception {
+        in.close();
+        out.close();
         socket.close();
     }
 
