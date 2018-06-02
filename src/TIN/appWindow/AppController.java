@@ -98,30 +98,7 @@ public class AppController {
             return;
         }
 
-        ///------------TEST--------------//TODO remove this block
-        byte[] before = Converter.getBytesFromImage(sendingImage);
-        ByteArrayInputStream in = new ByteArrayInputStream(before);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Encryptor encryptor = new Encryptor();
-        try {
-            encryptor.encrypt(in, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        byte[] after = out.toByteArray();
-
-        ByteArrayInputStream in2 = new ByteArrayInputStream(after);
-        ByteArrayOutputStream out2 = new ByteArrayOutputStream();
-        try {
-            encryptor.decrypt(in2, out2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        imageView.setImage(Converter.getImageFromBytes(out2.toByteArray()));
-
-        ///--------------------------
-//        imageView.setImage(sendingImage); //TODO remove
-//        connectionManager.send(Converter.getImageFromBytes(sendingImage)); //TODO uncomment
+        connectionManager.send(Converter.getBytesFromImage(sendingImage));
     }
 
     @FXML
