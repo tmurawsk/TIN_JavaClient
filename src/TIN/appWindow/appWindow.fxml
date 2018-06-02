@@ -74,7 +74,7 @@
             </Button>
          </children>
       </GridPane>
-      <ImageView fx:id="imageView" fitHeight="512.0" fitWidth="512.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+      <ImageView fx:id="imageView" fitHeight="512.0" fitWidth="512.0" pickOnBounds="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" onMouseClicked="#onImageViewClicked">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </GridPane.margin>

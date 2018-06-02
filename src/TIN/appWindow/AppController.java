@@ -1,7 +1,10 @@
 package TIN.appWindow;
 
+import TIN.ConnectionManager;
+import TIN.Converter;
+import TIN.Encryptor;
+import TIN.menu.MenuController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,9 +12,13 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class AppController {
+    private ConnectionManager connectionManager;
+
     @FXML
     private Text filePathText;
 
@@ -20,13 +27,17 @@ public class AppController {
 
     @FXML
     private Button sendButton;
+
     @FXML
     private Button loadButton;
+
     @FXML
     private Button disconnectButton;
 
-    private Image image;
+    private Image sendingImage;
+
     private FileChooser fileChooser;
+
 
     public AppController() {
         FileChooser.ExtensionFilter imageFilter
@@ -38,6 +49,20 @@ public class AppController {
 
     @FXML
     private void onDisconnectButtonClicked() {
+        try {
+            connectionManager.disconnect();
+        } catch (SecurityException e) {
+            showAlertDialog(
+                    "Error interrupting thread",
+                    e.getMessage()
+            );
+        } catch (Exception e) {
+            showAlertDialog(
+                    "Error disconnecting",
+                    e.getMessage()
+            );
+        }
+
         Stage stage = (Stage) disconnectButton.getScene().getWindow();
         stage.close();
     }
@@ -57,7 +82,7 @@ public class AppController {
             }
 
             filePathText.setText(file.getPath());
-            image = new Image(file.toURI().toString());
+            sendingImage = new Image(file.toURI().toString());
         }
     }
 
@@ -66,24 +91,55 @@ public class AppController {
         String filePath = filePathText.getText();
 
         if (!validateFilePathText(filePath)) {
-            showAlertDialog("No file to send", "Please choose a file before sending!");
+            showAlertDialog(
+                    "No file to send",
+                    "Please choose a file before sending!"
+            );
             return;
         }
 
-        imageView.setImage(image);
+        ///------------TEST--------------//TODO remove this block
+        byte[] before = Converter.getBytesFromImage(sendingImage);
+        ByteArrayInputStream in = new ByteArrayInputStream(before);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Encryptor encryptor = new Encryptor();
+        try {
+            encryptor.encrypt(in, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        byte[] after = out.toByteArray();
 
-        //TODO ask Client to send image
+        ByteArrayInputStream in2 = new ByteArrayInputStream(after);
+        ByteArrayOutputStream out2 = new ByteArrayOutputStream();
+        try {
+            encryptor.decrypt(in2, out2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        imageView.setImage(Converter.getImageFromBytes(out2.toByteArray()));
+
+        ///--------------------------
+//        imageView.setImage(sendingImage); //TODO remove
+//        connectionManager.send(Converter.getImageFromBytes(sendingImage)); //TODO uncomment
+    }
+
+    @FXML
+    private void onImageViewClicked() {
+        imageView.setImage(
+                Converter.getImageFromBytes(
+                        connectionManager.getNextImage()));
     }
 
     private void showAlertDialog(String headerMsg, String contextMsg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(headerMsg);
-        alert.setContentText(contextMsg);
-        alert.showAndWait();
+        MenuController.showAlertDialog(headerMsg, contextMsg);
     }
 
     private boolean validateFilePathText(String filePath) {
         return !filePath.equals("*none*");
+    }
+
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
     }
 }
