@@ -24,15 +24,15 @@ public class ConnectionManager {
 
             try {
                 while (true) {
-                    //TODO read header and then buffer?
                     byte[] buffer = connection.read(Converter.maxImageSize);
+                    System.out.println("Incoming message!");
 
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//                    ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
+//                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                    encryptor.decrypt(inputStream, outputStream);
+                    byte[] decrypted = encryptor.decrypt(buffer);
 
-                    messageQueue.add(outputStream.toByteArray());
+                    messageQueue.add(decrypted);
                 }
             } catch (NoSuchAlgorithmException | NoSuchPaddingException
                     | InvalidKeyException e) {
@@ -41,7 +41,7 @@ public class ConnectionManager {
                         e.getMessage()
                 );
             } catch (SocketException e) {
-                System.out.println("Disconnecting...");
+                System.out.println("Shutting down receiver...");
             } catch (Exception e) {
                 MenuController.showAlertDialog(
                         "Error reading from socket",
@@ -61,20 +61,19 @@ public class ConnectionManager {
         @Override
         public void run() {
             try {
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//                ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
+//                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                encryptor.encrypt(inputStream, outputStream);
-                connection.send(outputStream.toByteArray());
+                byte[] encrypted = encryptor.encrypt(buffer);
+                System.out.println("Sending image...");
+                connection.send(encrypted);
+                System.out.println("Image sent.");
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException
                     | InvalidKeyException e) {
-                MenuController.showAlertDialog(
-                        "Error encrypting message",
-                        e.getMessage()
-                );
+                System.err.println("Error encrypting message!");
             } catch (SocketException e) {
-                System.out.println("Disconnecting...");
+                System.out.println("Shutting down sender...");
             } catch (Exception e) {
                 MenuController.showAlertDialog(
                         "Error sending to socket",

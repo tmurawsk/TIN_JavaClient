@@ -76,10 +76,10 @@ public class AppController {
             String fileName = file.getName();
             String fileExtension = fileName.substring(fileName.indexOf(".") + 1, fileName.length());
 
-            if (!fileExtension.equals("bmp")) {
-                showAlertDialog("Bad file extension", "Please choose .bmp file!");
-                return;
-            }
+//            if (!fileExtension.equals("bmp")) {
+//                showAlertDialog("Bad file extension", "Please choose .bmp file!");
+//                return;
+//            }
 
             filePathText.setText(file.getPath());
             sendingImage = new Image(file.toURI().toString());
@@ -98,6 +98,26 @@ public class AppController {
             return;
         }
 
+//        byte[] before = Converter.getBytesFromImage(sendingImage);
+////        ByteArrayInputStream in = new ByteArrayInputStream(before);
+////        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        Encryptor encryptor = new Encryptor();
+//        try {
+//            byte[] after = encryptor.encrypt(before);
+//            byte[] img = encryptor.decrypt(after);
+//            imageView.setImage(Converter.getImageFromBytes(img));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+//        ByteArrayInputStream in2 = new ByteArrayInputStream(after);
+//        ByteArrayOutputStream out2 = new ByteArrayOutputStream();
+//        try {
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+//
         connectionManager.send(Converter.getBytesFromImage(sendingImage));
     }
 
