@@ -1,7 +1,6 @@
 package TIN;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -21,7 +20,7 @@ class Connection {
         this.ipAddress = ipAddress;
         this.port = port;
         socket.connect(new InetSocketAddress(ipAddress, port));
-        in = new DataInputStream(socket.getInputStream());
+        in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         out = new DataOutputStream(socket.getOutputStream());
     }
 
@@ -37,7 +36,7 @@ class Connection {
 
     byte[] read(int size) throws Exception {
         byte[] message = new byte[size];
-        in.readFully(message);
+        in.read(message);
         return message;
     }
 }

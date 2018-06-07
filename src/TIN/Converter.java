@@ -17,15 +17,15 @@ public class Converter {
         return new byte[size];
     }
 
-    public static byte[] getBytesFromImage(Image image) {
+    public static byte[] getBytesFromImage(Image image, String extension) {
         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer;
 
         try {
-            ImageIO.write(bufferedImage, "bmp", out);
-            buffer = out.toByteArray();
+            ImageIO.write(bufferedImage, extension, out);
+            byte[] buffer = out.toByteArray();
             out.close();
+            return buffer;
         } catch (IOException e) {
             MenuController.showAlertDialog(
                     "Error converting image to byte array",
@@ -33,7 +33,6 @@ public class Converter {
             );
             return null;
         }
-        return buffer;
     }
 
     public static Image getImageFromBytes(byte[] buffer) {

@@ -6,8 +6,10 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class ConnectionManager {
@@ -24,15 +26,25 @@ public class ConnectionManager {
 
             try {
                 while (true) {
-                    byte[] buffer = connection.read(Converter.maxImageSize);
-                    System.out.println("Incoming message!");
+
+                    byte[] message = connection.read(Converter.maxImageSize);
+
+                    System.out.println("Incoming message! Total size: " + message.length + " bytes.");
+
+                    byte[] header = Arrays.copyOfRange(message, 0, 4);
+                    byte[] buffer = Arrays.copyOfRange(message, 4, message.length);
+
+                    int size = ByteBuffer.wrap(header).getInt();
+
+                    if (size != buffer.length)
+                        throw new Exception("Wrong amount of data read from socket");
 
 //                    ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
 //                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                    byte[] decrypted = encryptor.decrypt(buffer);
-
-                    messageQueue.add(decrypted);
+//                    byte[] decrypted = encryptor.decrypt(buffer);
+//                    messageQueue.add(decrypted);
+                    messageQueue.add(buffer);
                 }
             } catch (NoSuchAlgorithmException | NoSuchPaddingException
                     | InvalidKeyException e) {
@@ -64,10 +76,22 @@ public class ConnectionManager {
 //                ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
 //                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                byte[] encrypted = encryptor.encrypt(buffer);
                 System.out.println("Sending image...");
-                connection.send(encrypted);
-                System.out.println("Image sent.");
+
+//                byte[] encrypted = encryptor.encrypt(buffer);
+                byte[] encrypted = buffer;
+
+                ByteBuffer byteBuf = ByteBuffer.allocate(4);
+                byteBuf.putInt(encrypted.length);
+                byte[] header = byteBuf.array();
+
+                byte[] message = new byte[encrypted.length + header.length];
+                System.arraycopy(header, 0, message, 0, header.length);
+                System.arraycopy(encrypted, 0, message, header.length, encrypted.length);
+
+                connection.send(message);
+
+                System.out.println("Image sent. Total size: " + message.length + " bytes.");
 
             } catch (NoSuchAlgorithmException | NoSuchPaddingException
                     | InvalidKeyException e) {
