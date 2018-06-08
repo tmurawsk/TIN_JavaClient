@@ -40,11 +40,11 @@ public class AppController {
 
 
     public AppController() {
-        FileChooser.ExtensionFilter imageFilter
-                = new FileChooser.ExtensionFilter("Image Files", "*.bmp");
+//        FileChooser.ExtensionFilter imageFilter
+//                = new FileChooser.ExtensionFilter("Image Files", "*.bmp");
 
         fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(imageFilter);
+//        fileChooser.getExtensionFilters().add(imageFilter);
     }
 
     @FXML
@@ -74,7 +74,6 @@ public class AppController {
 
         if (file != null) {
             String fileName = file.getName();
-            String fileExtension = fileName.substring(fileName.indexOf(".") + 1, fileName.length());
 
 //            if (!fileExtension.equals("bmp")) {
 //                showAlertDialog("Bad file extension", "Please choose .bmp file!");
@@ -117,8 +116,15 @@ public class AppController {
 //            e.printStackTrace();
 //        }
 
-//
-        connectionManager.send(Converter.getBytesFromImage(sendingImage));
+        connectionManager.send(Converter.getBytesFromImage(
+                sendingImage,
+                "jpg"
+//                filePath
+//                        .substring(
+//                                filePath.indexOf("." + 1),
+//                                filePath.length()
+//                        )
+        ));
     }
 
     @FXML
